@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { getPokeData, getPokeName } from "../libs/Pokeapi";
+import Button from "./Button";
 
 export default function Main() {
   const [pokeData, setPokeData] = useState({
@@ -12,11 +14,8 @@ export default function Main() {
   });
   const [err, setErr] = useState(null);
   const [num, setNum] = useState(null);
-
   const [bingoNum, setBingoNum] = useState([]);
   const [stockNum, setStockNum] = useState([]);
-
-  console.log(stockNum);
 
   useEffect(() => {
     const arr = Array.from({ length: 75 }, (_, i) => i + 1);
@@ -28,21 +27,11 @@ export default function Main() {
     if (bingoLen === 0) return;
     const randomNum = Math.floor(Math.random() * bingoLen);
     const getNum = bingoNum[randomNum];
-    console.log(randomNum);
     setNum(getNum);
-    console.log(getNum);
     setStockNum([...stockNum, getNum].sort((a, b) => a - b));
     try {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${getNum}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed!");
-      }
-      const data = await response.json();
-      console.log(data);
-      const pokeName = await fetchName(data.species.url);
-      console.log(pokeName);
+      const data = await getPokeData(getNum);
+      const pokeName = await getPokeName(data.species.url);
       setPokeData({
         ...pokeData,
         species: {
@@ -52,7 +41,6 @@ export default function Main() {
         },
         image: data.sprites.other["official-artwork"].front_default,
       });
-      console.log(getNum);
       const newArr = bingoNum.filter((item) => item !== Number(getNum));
       setBingoNum(newArr);
     } catch (err) {
@@ -60,34 +48,11 @@ export default function Main() {
     }
   };
 
-  const fetchName = async (url) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Failed!");
-      }
-      const data = await response.json();
-      //   console.log(data);
-      return data;
-    } catch (err) {
-      setErr(err.message);
-    }
-  };
-
   if (err) return <p>Error:{err}</p>;
-  //   console.log(pokeData);
 
   return (
     <div>
-      <input
-        type="number"
-        min="1"
-        max="75"
-        onChange={(e) => e.target.value <= 75 && setNum(e.target.value)}
-      />
-      <button type="button" onClick={() => fetchData()}>
-        click
-      </button>
+      <Button onClick={() => fetchData()} />
       {num !== null && <p>図鑑番号：{num}</p>}
       {pokeData.species.name !== null && (
         <div>
