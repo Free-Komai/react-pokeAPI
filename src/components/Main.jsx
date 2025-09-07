@@ -31,7 +31,7 @@ export default function Main() {
 
   useEffect(() => {
     if (bingoFrag) {
-      setTimeout(() => setBingoFrag(false), 3000);
+      setTimeout(() => setBingoFrag(false), 2000);
     }
   }, [bingoFrag]);
 
@@ -86,7 +86,7 @@ export default function Main() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 3 }}
+            transition={{ delay: 2.5 }}
           >
             <Stock stockNum={stockNum} num={num} />
           </motion.div>
