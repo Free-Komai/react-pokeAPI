@@ -54,18 +54,20 @@ export default function Main() {
   if (err) return <p>Error:{err}</p>;
 
   return (
-    <div className="container m-auto">
-      <div className=" flex justify-end">
+    <div className="container">
+      <div>
         <Button className="" fetchData={fetchData} />
       </div>
-      <div className="m-auto flex justify-center">
-        {num !== null && <Ball num={num} />}
+      <div className="flex justify-center items-start">
+        {num !== null && <Ball num={num} size="big" />}
         {pokeData.species.name !== null && (
           <div>
             <Data pokeData={pokeData} />
-            <Stock stockNum={stockNum} />
           </div>
         )}
+      </div>
+      <div>
+        <Stock stockNum={stockNum} />
       </div>
     </div>
   );

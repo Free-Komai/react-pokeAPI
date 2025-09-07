@@ -2,7 +2,7 @@ import Ball from "./Ball";
 
 export default function Stock({ stockNum }) {
   return (
-    <div className="flex gap-5 flex-wrap m-auto p-3">
+    <div className="flex flex-wrap ml-5 p-3 mb-15">
       {stockNum.map((data, num) => (
         // <p
         //   key={num}
@@ -10,7 +10,7 @@ export default function Stock({ stockNum }) {
         // >
         //   {data}
         // </p>
-        <Ball key={num} num={data} />
+        <Ball key={num} num={data} size="small" />
       ))}
     </div>
   );
