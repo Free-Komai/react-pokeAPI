@@ -1,6 +1,13 @@
+// eslint-disable-next-line no-unused-vars
+import { motion, spring } from "motion/react";
+
 export default function Ball({ num, size }) {
   return (
-    <div className="p-3">
+    <motion.div
+      className="p-3 cursor-pointer"
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+    >
       {size === "big" && (
         <div className="relative w-[40vw] h-[20vw] max-w-50 max-h-25">
           <div className="absolute pt-1 font-bold bg-red-600 border-6 border-b-3 border-black w-[40vw] h-[20vw] max-w-50 max-h-25 text-center rounded-tl-full rounded-tr-full"></div>
@@ -52,6 +59,6 @@ export default function Ball({ num, size }) {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

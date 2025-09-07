@@ -4,6 +4,9 @@ import Button from "./Button";
 import Ball from "./Ball";
 import Data from "./Data";
 import Stock from "./Stock";
+import Action from "./Action";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 
 export default function Main() {
   const [pokeData, setPokeData] = useState({
@@ -19,13 +22,21 @@ export default function Main() {
   const [num, setNum] = useState(null);
   const [bingoNum, setBingoNum] = useState([]);
   const [stockNum, setStockNum] = useState([]);
+  const [bingoFrag, setBingoFrag] = useState(false);
 
   useEffect(() => {
     const arr = Array.from({ length: 75 }, (_, i) => i + 1);
     setBingoNum(arr);
   }, []);
 
+  useEffect(() => {
+    if (bingoFrag) {
+      setTimeout(() => setBingoFrag(false), 3000);
+    }
+  }, [bingoFrag]);
+
   const fetchData = async () => {
+    setBingoFrag(true);
     const bingoLen = bingoNum.length;
     if (bingoLen === 0) return;
     const randomNum = Math.floor(Math.random() * bingoLen);
@@ -55,20 +66,33 @@ export default function Main() {
 
   return (
     <div className="container">
-      <div>
-        <Button className="" fetchData={fetchData} />
-      </div>
-      <div className="flex justify-center items-start">
-        {num !== null && <Ball num={num} size="big" />}
-        {pokeData.species.name !== null && (
+      {!bingoFrag && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+        >
           <div>
-            <Data pokeData={pokeData} />
+            <Button className="" fetchData={fetchData} />
           </div>
-        )}
-      </div>
-      <div>
-        <Stock stockNum={stockNum} />
-      </div>
+          <div className="flex justify-center items-start">
+            {num !== null && <Ball num={num} size="big" />}
+            {pokeData.species.name !== null && (
+              <div>
+                <Data pokeData={pokeData} />
+              </div>
+            )}
+          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3 }}
+          >
+            <Stock stockNum={stockNum} num={num} />
+          </motion.div>
+        </motion.div>
+      )}
+      {bingoFrag && <Action />}
     </div>
   );
 }
