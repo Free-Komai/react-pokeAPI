@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { getPokeData, getPokeName } from "../libs/Pokeapi";
 import Button from "./Button";
+import Ball from "./Ball";
+import Data from "./Data";
+import Stock from "./Stock";
 
 export default function Main() {
   const [pokeData, setPokeData] = useState({
@@ -51,26 +54,19 @@ export default function Main() {
   if (err) return <p>Error:{err}</p>;
 
   return (
-    <div>
-      <Button onClick={() => fetchData()} />
-      {num !== null && <p>図鑑番号：{num}</p>}
-      {pokeData.species.name !== null && (
-        <div>
-          <img src={pokeData.image} alt="image" />
-          <p>名前：{pokeData.species.name}</p>
-          <p>{pokeData.species.genus}</p>
-          <div className="flex gap-5 flex-wrap m-auto p-3">
-            {stockNum.map((data, num) => (
-              <p
-                key={num}
-                className=" items-center p-3 text-white font-bold bg-red-600 border-4 border-black text-2xl w-15 text-center rounded-full"
-              >
-                {data}
-              </p>
-            ))}
+    <div className="container m-auto">
+      <div className=" flex justify-end">
+        <Button className="" fetchData={fetchData} />
+      </div>
+      <div className="m-auto flex justify-center">
+        {num !== null && <Ball num={num} />}
+        {pokeData.species.name !== null && (
+          <div>
+            <Data pokeData={pokeData} />
+            <Stock stockNum={stockNum} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
